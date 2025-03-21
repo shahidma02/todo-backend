@@ -3,12 +3,30 @@ import { Todo } from "../entities/todo";
 import { TodoDTO } from "../dto/todoDto";
 import { DeepPartial } from "typeorm";
 
+import { z } from 'zod';
+
+const todoSchema = z.object({
+    title: z.string(),
+    description:z.string(),
+    status: z.enum(['Pending','Completed'])
+})
+
 export class TodoServices {
     private todoRepository = AppDataSource.getRepository(Todo);
 
-    async create(todoDto: TodoDTO): Promise<Todo> {
-        const todo = this.todoRepository.create(todoDto as DeepPartial<Todo>);
-        return this.todoRepository.save(todo);
+    async create(todoDto: TodoDTO): Promise<Todo|{ error: any }> {
+        
+        const result = todoSchema.safeParse(todoDto);
+
+        if(!result.success){
+            return { error: result.error };
+        }
+        try {
+            const todo = this.todoRepository.create(todoDto); 
+            return await this.todoRepository.save(todo);
+        } catch (error) {
+            return { error };
+        }        
     }
 
     async getAll(): Promise<Todo[]> {

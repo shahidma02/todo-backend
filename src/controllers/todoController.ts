@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import { TodoServices } from "../services/todoService";
 import { TodoDTO } from "../dto/todoDto";
+import { error } from "console";
 // import { error } from "console";
 
 export class TodoControllers {
@@ -8,9 +9,16 @@ export class TodoControllers {
     static async createTodo (req: Request, res:Response): Promise<void>{
         try{
             const todo = await new TodoServices().create(req.body);
-            res.status(201).json(todo);
+            if ('error' in todo)
+            {
+                res.status(400).json({message:todo.error});
+            }
+            else{
+                res.status(201).json(todo);
+            }
+            
         }catch(error:any){
-            res.status(400).json({message:error.message});
+            res.status(500).json({message:error.message});
         }
     };
 
