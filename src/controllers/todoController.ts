@@ -1,8 +1,6 @@
 import {Request, Response} from "express";
 import { TodoServices } from "../services/todoService";
 import { TodoDTO } from "../dto/todoDto";
-import { error } from "console";
-// import { error } from "console";
 
 export class TodoControllers {
 

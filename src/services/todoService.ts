@@ -1,7 +1,6 @@
 import { AppDataSource } from "../config/database";
 import { Todo } from "../entities/todo";
 import { TodoDTO } from "../dto/todoDto";
-import { DeepPartial } from "typeorm";
 
 import { z } from 'zod';
 
@@ -14,7 +13,7 @@ const todoSchema = z.object({
 export class TodoServices {
     private todoRepository = AppDataSource.getRepository(Todo);
 
-    async create(todoDto: TodoDTO): Promise<Todo|{ error: any }> {
+    async create(todoDto: TodoDTO): Promise<Todo|{ error:any }> {
         
         const result = todoSchema.safeParse(todoDto);
 

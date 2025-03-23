@@ -3,6 +3,7 @@ import express from "express";
 import { AppDataSource } from "./config/database";
 import todoRoutes from "./routes/todoRoutes";
 
+
 const app = express();
 app.use(express.json());
 
